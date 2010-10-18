@@ -39,9 +39,9 @@ module QueryTrace
 
     return result unless ActiveRecord::Base.logger and ActiveRecord::Base.logger.debug?
     return result if / Columns$/ =~ name
-
-    ActiveRecord::Base.logger.debug(format_trace(Rails.backtrace_cleaner.clean(caller)[0..self.depth]))
-
+    logs = caller #Rails.backtrace_cleaner.clean(caller)
+    logs = logs.grep(/#{Rails.root}/)[0..self.depth]
+    ActiveRecord::Base.logger.debug(format_trace(logs))
     result 
   end
 
